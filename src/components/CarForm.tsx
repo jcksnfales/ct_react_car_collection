@@ -40,10 +40,6 @@ const ContactForm = (props:ContactFormProps) => {
     }
   }
 
-  const testFunc = () => {
-    
-  }
-
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
