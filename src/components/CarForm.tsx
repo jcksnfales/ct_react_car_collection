@@ -73,9 +73,6 @@ const ContactForm = (props:ContactFormProps) => {
             </button>
         </div>
       </form>
-      <button onClick={testFunc} className="flex mx-auto px-5 p-2 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">
-        Test
-      </button>
     </div>
   )
 }
