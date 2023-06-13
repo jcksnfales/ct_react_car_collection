@@ -6,7 +6,9 @@ import { useDispatch, useStore } from "react-redux"
 import { chooseNickname, chooseMake, chooseModel, chooseYear, chooseMileage } from "../redux/slices/RootSlice"
 
 interface ContactFormProps {
-    id?: string[]
+    id?: string[],
+    closeModal: () => void,
+    tableRefresh: () => Promise<void>
 }
 
 const ContactForm = (props:ContactFormProps) => {
@@ -15,7 +17,7 @@ const ContactForm = (props:ContactFormProps) => {
   const store = useStore();
 
   const onSubmit = (data:any, event:any) => {
-    console.log(`ID: ${props.id}`)
+    console.log(`ID: ${JSON.stringify(data)}`)
 
     if (props.id && props.id.length > 0) { // we need props.id.length > 0 here because an empty array is NOT FALSEY (unlike python)
       server_calls.update(props.id[0], data)
@@ -27,16 +29,22 @@ const ContactForm = (props:ContactFormProps) => {
       dispatch(chooseNickname(data.nickname))
       dispatch(chooseMake(data.make))
       dispatch(chooseModel(data.model))
-      dispatch(chooseYear(data.year))
+      dispatch(chooseYear(data.prodyear))
       dispatch(chooseMileage(data.mileage))
 
       server_calls.create(store.getState())
-      setTimeout(() => {window.location.reload()}, 1000)
+      .then(() => {
+        props.closeModal();
+        props.tableRefresh();
+      })
     }
   }
 
+  const testFunc = () => {
+    
+  }
+
   return (
-    // TODO - add Handle function
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -53,18 +61,21 @@ const ContactForm = (props:ContactFormProps) => {
         </div>
         <div>
             <label htmlFor="year">Production Year</label>
-            <Input {...register('year')} name="year" placeholder="year"/>
+            <Input {...register('prodyear')} name="prodyear" placeholder="production year" type="number"/>
         </div>
         <div>
             <label htmlFor="mileage">Mileage</label>
-            <Input {...register('mileage')} name="mileage" placeholder="mileage"/>
+            <Input {...register('mileage')} name="mileage" placeholder="mileage" type="number"/>
         </div>
         <div className="flex p-1">
-            <button className="flex justify-start m-3 bg-slate-300 p-2 rounded hover:bg-slate-800 text-white">
+            <button className="flex mx-auto px-5 p-2 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">
                 Submit
             </button>
         </div>
       </form>
+      <button onClick={testFunc} className="flex mx-auto px-5 p-2 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">
+        Test
+      </button>
     </div>
   )
 }

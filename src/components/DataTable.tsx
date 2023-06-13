@@ -5,7 +5,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useGetData } from '../custom-hooks/FetchData'
 
 const columns:GridColDef[] = [
-  {field: 'id', headerName: 'ID', width: 90},
+  {field: 'id', headerName: 'ID', flex: 1},
   {field: 'nickname', headerName: 'Nickname', flex: 1},
   {field: 'make', headerName: 'Make', flex: 1},
   {field: 'model', headerName: 'Model', flex: 1},
@@ -26,26 +26,25 @@ function DataTable() {
   }
   
   const deleteData = () => {
-    server_calls.delete(selectionModel[0])
-    getData()
-    console.log(`Selection model: ${selectionModel}`)
-    setTimeout(() => {window.location.reload()}, 500)
+    server_calls.delete(selectionModel[0]).then(() => {
+        getData()
+    })
   }
 
   return (
     <>
-        <Modal open={open} onClose={closeModal}/>
-        <div className="flex flex-row">
+        <Modal open={open} funcClose={closeModal} tableRefresh={getData}/>
+        <div className="flex flex-row w-fit mx-auto mt-7">
             <div>
                 <button className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white"
                 onClick={() => openModal()}>
-                    Create New Contact
+                    Add New Car
                 </button>
             </div>
             <button onClick={openModal} className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">Update</button>
             <button onClick={deleteData} className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">Delete</button>
         </div>
-        <div className={open ? "hidden" : "container mx-10 my-5 flex flex-col"} style={{height:400, width:'100%'}}>
+        <div className={open ? "hidden" : "container mx-auto my-5 flex flex-col "} style={{height:'80%', width:'100%'}}>
             <h2 className="p-3 bg-slate-300 my-2 rounded">My Cars</h2>
             <DataGrid rows={carsData} columns={columns} checkboxSelection={true} onRowSelectionModelChange={(item:any) => {setSelectionModel(item)}}/>
         </div>

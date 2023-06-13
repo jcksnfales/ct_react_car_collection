@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { signInWithPopup, signOut } from 'firebase/auth'
 import { auth, Providers } from '../config/firebase'
 
 function Navbar() {
     const [isVisible, setIsVisible] = useState(false)
+    const navigate = useNavigate();
 
     const toggleNavVis = ():void => {
         setIsVisible(!isVisible)
@@ -15,7 +16,7 @@ function Navbar() {
 
     const signOutOnClick = () => {
         signOut(auth)
-        location.reload()
+        .then(() => {navigate('/')})
     }
     const signInOnClick = async () => {
         await signInWithPopup(auth, Providers.google)
@@ -26,7 +27,7 @@ function Navbar() {
     return (
         <nav className="flex items-center justify-between flex-wrap bg-slate-800 p-6">
             <div className="flex items-center flex-shrink-0 text-slate-200">
-                <Link to="/" className="font-semibold text-xl tracking-right">Car Collection</Link>
+                <Link to="/" className="font-semibold text-xl">Car Collection</Link>
             </div>
             <div className="block">
                 <button onClick={toggleNavVis} className="flex items-center px-3 py-2 text-slate-200 border rounded border-slate-400 hover:text-slate-100 hover:border-slate-200">

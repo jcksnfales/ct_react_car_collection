@@ -6,14 +6,14 @@ const rootSlice = createSlice({
         nickname: "Nickname",
         make: "Make",
         model: "Model",
-        year: "Year",
-        mileage: "Mileage"
+        prodyear: 2000,
+        mileage: 1000
     },
     reducers: {
         chooseNickname: (state, action) => {state.nickname = action.payload},
         chooseMake: (state, action) => {state.make = action.payload},
         chooseModel: (state, action) => {state.model = action.payload},
-        chooseYear: (state, action) => {state.year = action.payload},
+        chooseYear: (state, action) => {state.prodyear = action.payload},
         chooseMileage: (state, action) => {state.mileage = action.payload},
     }
 })
