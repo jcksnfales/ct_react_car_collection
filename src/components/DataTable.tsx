@@ -16,10 +16,12 @@ const columns:GridColDef[] = [
 function DataTable() {
   const [open, setOpen] = useState(false);
   const {carsData, getData} = useGetData();
-  const [selectionModel, setSelectionModel] = useState<string[]>([])
+  const [selectionModel, setSelectionModel] = useState<string[]>([]);
+  const [formMode, setFormMode] = useState('create');
 
-  const openModal = () => {
-    setOpen(true)
+  const openModal = (mode:string) => {
+    setFormMode(mode);
+    setOpen(true);
   }
   const closeModal = () => {
     setOpen(false)
@@ -33,15 +35,15 @@ function DataTable() {
 
   return (
     <>
-        <Modal open={open} funcClose={closeModal} tableRefresh={getData}/>
+        <Modal open={open} formMode={formMode} selectionId={selectionModel[0]} funcClose={closeModal} tableRefresh={getData}/>
         <div className="flex flex-row w-fit mx-auto mt-7">
             <div>
                 <button className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white"
-                onClick={() => openModal()}>
+                onClick={() => openModal('create')}>
                     Add New Car
                 </button>
             </div>
-            <button onClick={openModal} className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">Update</button>
+            <button onClick={() => openModal('update')} className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">Update</button>
             <button onClick={deleteData} className="p-3 bg-slate-300 m-3 rounded hover:bg-slate-800 hover:text-white">Delete</button>
         </div>
         <div className={open ? "hidden" : "container mx-auto my-5 flex flex-col "} style={{height:'80%', width:'100%'}}>

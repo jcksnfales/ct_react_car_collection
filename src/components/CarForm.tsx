@@ -7,8 +7,10 @@ import { chooseNickname, chooseMake, chooseModel, chooseYear, chooseMileage } fr
 
 interface ContactFormProps {
     id?: string[],
+    formMode: string,
+    selectionId: string | undefined,
     closeModal: () => void,
-    tableRefresh: () => Promise<void>
+    tableRefresh: () => Promise<void>,
 }
 
 const ContactForm = (props:ContactFormProps) => {
@@ -16,23 +18,24 @@ const ContactForm = (props:ContactFormProps) => {
   const dispatch = useDispatch();
   const store = useStore();
 
-  const onSubmit = (data:any, event:any) => {
-    console.log(`ID: ${JSON.stringify(data)}`)
+  const onSubmit = async (data:any, event:any) => {
+    dispatch(chooseNickname(data.nickname))
+    dispatch(chooseMake(data.make))
+    dispatch(chooseModel(data.model))
+    dispatch(chooseYear(data.prodyear))
+    dispatch(chooseMileage(data.mileage))
 
-    if (props.id && props.id.length > 0) { // we need props.id.length > 0 here because an empty array is NOT FALSEY (unlike python)
-      server_calls.update(props.id[0], data)
-      console.log(`Updated: ${data} ${props.id}`)
-      setTimeout(() => {window.location.reload()}, 1000)
-      event.target.reset()
+    if (props.formMode == "update" && props.selectionId != undefined) {
+      // update
+      console.log(props.selectionId);
+      await server_calls.update(props.selectionId, store.getState())
+      .then(() => {
+        props.closeModal();
+        props.tableRefresh();
+      })
     } else {
-      // use dispatch to update our state in our store
-      dispatch(chooseNickname(data.nickname))
-      dispatch(chooseMake(data.make))
-      dispatch(chooseModel(data.model))
-      dispatch(chooseYear(data.prodyear))
-      dispatch(chooseMileage(data.mileage))
-
-      server_calls.create(store.getState())
+      // create
+      await server_calls.create(store.getState())
       .then(() => {
         props.closeModal();
         props.tableRefresh();

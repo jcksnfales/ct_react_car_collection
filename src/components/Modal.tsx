@@ -3,6 +3,8 @@ import CarForm from "./CarForm";
 type Props = {
     id?: string[];
     open: boolean;
+    formMode: string;
+    selectionId: string | undefined;
     funcClose: () => void;
     tableRefresh: () => Promise<void>;
 }
@@ -19,7 +21,7 @@ const Modal = (props: Props) => {
                         </p>
                     </div>
                     <div className="flex flex-col items-center text-center mt-3 p-2">
-                        <CarForm id={props.id} closeModal={props.funcClose} tableRefresh={props.tableRefresh}/>
+                        <CarForm id={props.id} formMode={props.formMode} selectionId={props.selectionId} closeModal={props.funcClose} tableRefresh={props.tableRefresh}/>
                     </div>
                 </div>
             </div>
