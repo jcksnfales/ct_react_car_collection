@@ -18,7 +18,7 @@ const ContactForm = (props:ContactFormProps) => {
   const dispatch = useDispatch();
   const store = useStore();
 
-  const onSubmit = async (data:any, event:any) => {
+  const onSubmit = async (data:any) => {
     dispatch(chooseNickname(data.nickname))
     dispatch(chooseMake(data.make))
     dispatch(chooseModel(data.model))
